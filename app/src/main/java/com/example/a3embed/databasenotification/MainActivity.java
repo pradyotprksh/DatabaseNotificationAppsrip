@@ -28,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseHandler db;             // Database Variable
     private TextView databaseTv;            // Output TextView
     private List<Contact> contacts;         // Contact List
-    private IntentFilter mIntentFilter;     // IntentFilter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +165,8 @@ public class MainActivity extends AppCompatActivity {
      * <p>Register airplane broadcast receiver</p>
      */
     void registerAirplaneBroadcast() {
-        mIntentFilter = new IntentFilter();
+        // IntentFilter
+        IntentFilter mIntentFilter = new IntentFilter();
         ManifestBroadcastReciever receiver = new ManifestBroadcastReciever();
         mIntentFilter.addAction("android.intent.action.AIRPLANE_MODE");
         mIntentFilter.addAction("android.net.wifi.STATE_CHANGE");

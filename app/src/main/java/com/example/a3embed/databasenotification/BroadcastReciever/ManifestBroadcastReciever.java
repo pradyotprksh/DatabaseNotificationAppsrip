@@ -7,9 +7,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
-import android.provider.Telephony;
 import android.support.annotation.RequiresApi;
-import android.telephony.SmsMessage;
 import android.widget.Toast;
 
 import java.util.Objects;
