@@ -1,5 +1,6 @@
 package com.example.a3embed.databasenotification;
 
+import android.content.IntentFilter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -8,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.a3embed.databasenotification.BroadcastReciever.ManifestBroadcastReciever;
 import com.example.a3embed.databasenotification.Database.Handler.DatabaseHandler;
 import com.example.a3embed.databasenotification.Database.Model.Contact;
 
@@ -23,9 +25,10 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private DatabaseHandler db;         // Database Variable
-    private TextView databaseTv;        // Output TextView
-    private List<Contact> contacts;     // Contact List
+    private DatabaseHandler db;             // Database Variable
+    private TextView databaseTv;            // Output TextView
+    private List<Contact> contacts;         // Contact List
+    private IntentFilter mIntentFilter;     // IntentFilter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
 
         databaseTv = findViewById(R.id.databaseTv);
         db = new DatabaseHandler(this);
+        registerAirplaneBroadcast();
 
         addB.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +159,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    /**
+     * <h>registerAirplaneBroadcast()<h/>
+     * <p>Register airplane broadcast receiver</p>
+     */
+    void registerAirplaneBroadcast() {
+        mIntentFilter = new IntentFilter();
+        ManifestBroadcastReciever receiver = new ManifestBroadcastReciever();
+        mIntentFilter.addAction("android.intent.action.AIRPLANE_MODE");
+        mIntentFilter.addAction("android.net.wifi.STATE_CHANGE");
+        mIntentFilter.addAction("android.intent.action.BATTERY_CHANGED");
+        registerReceiver(receiver, mIntentFilter);
     }
 
     /**
