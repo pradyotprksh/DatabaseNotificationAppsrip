@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         mIntentFilter.addAction("android.intent.action.AIRPLANE_MODE");
         mIntentFilter.addAction("android.net.wifi.STATE_CHANGE");
         mIntentFilter.addAction("android.intent.action.BATTERY_CHANGED");
+        mIntentFilter.addAction("android.intent.action.PHONE_STATE");
         registerReceiver(receiver, mIntentFilter);
     }
 

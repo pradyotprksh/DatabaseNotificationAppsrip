@@ -7,7 +7,9 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.telephony.TelephonyManager;
 import android.widget.Toast;
 
 import java.util.Objects;
@@ -42,6 +44,17 @@ public class ManifestBroadcastReciever extends BroadcastReceiver {
                 float batteryPct = level / (float)scale;
                 Toast.makeText(context, String.valueOf(batteryPct), Toast.LENGTH_SHORT).show();
                 break;
+            case "android.intent.action.PHONE_STATE":
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    String state = extras.getString(TelephonyManager.EXTRA_STATE);
+                    Toast.makeText(context, state, Toast.LENGTH_SHORT).show();
+                    if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
+                        String phoneNumber = extras
+                                .getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
+                        Toast.makeText(context, phoneNumber, Toast.LENGTH_SHORT).show();
+                    }
+                }
         }
 
     }
