@@ -9,24 +9,43 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.telephony.TelephonyManager;
 import android.widget.Toast;
+
+import com.example.a3embed.databasenotification.R;
 
 import java.util.Objects;
 
 public class ManifestBroadcastReciever extends BroadcastReceiver {
 
+    private static final String CHANNEL_ID = "CUSTOM_CHANNEL_ID";
+
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onReceive(Context context, Intent intent) {
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context, CHANNEL_ID);
+        mBuilder.setSmallIcon(R.drawable.ic_launcher_background);
 
         switch(Objects.requireNonNull(intent.getAction())){
             case "android.intent.action.AIRPLANE_MODE":
                 boolean isAirplaneModeOn = intent.getBooleanExtra("state", false);
                 if(isAirplaneModeOn){
-                    Toast.makeText(context, "AirPlane Mode on", Toast.LENGTH_SHORT).show();
+                    mBuilder.setContentTitle("AirPlane Mode");
+                    mBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText("Airplane Mode is ON"));
+                    mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    notificationManager.notify(2, mBuilder.build());
                 } else {
-                    Toast.makeText(context, "AirPlane Mode off", Toast.LENGTH_SHORT).show();
+                    mBuilder.setContentTitle("AirPlane Mode");
+                    mBuilder.setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText("Airplane Mode is OFF"));
+                    mBuilder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
+                    notificationManager.notify(2, mBuilder.build());
                 }
                 break;
             case "android.net.wifi.STATE_CHANGE":
@@ -44,17 +63,6 @@ public class ManifestBroadcastReciever extends BroadcastReceiver {
                 float batteryPct = level / (float)scale;
                 Toast.makeText(context, String.valueOf(batteryPct), Toast.LENGTH_SHORT).show();
                 break;
-            case "android.intent.action.PHONE_STATE":
-                Bundle extras = intent.getExtras();
-                if (extras != null) {
-                    String state = extras.getString(TelephonyManager.EXTRA_STATE);
-                    Toast.makeText(context, state, Toast.LENGTH_SHORT).show();
-                    if (state.equals(TelephonyManager.EXTRA_STATE_RINGING)) {
-                        String phoneNumber = extras
-                                .getString(TelephonyManager.EXTRA_INCOMING_NUMBER);
-                        Toast.makeText(context, phoneNumber, Toast.LENGTH_SHORT).show();
-                    }
-                }
         }
 
     }
